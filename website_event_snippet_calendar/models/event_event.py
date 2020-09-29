@@ -3,7 +3,7 @@
 
 from odoo import api, fields, models, tools
 
-from odoo.addons.mail.models.mail_template import format_tz
+from odoo.addons.mail.models.mail_template import format_datetime
 
 
 class EventEvent(models.Model):
@@ -14,13 +14,12 @@ class EventEvent(models.Model):
         compute="_compute_date_begin_pred_located", store=True,
     )
 
-    @api.multi
     @api.depends("date_begin", "date_tz")
     def _compute_date_begin_pred_located(self):
         for record in self:
-            record.date_begin_pred_located = format_tz(
+            record.date_begin_pred_located = format_datetime(
                 self.with_context(use_babel=False).env,
                 record.date_begin,
                 tz=record.date_tz,
-                format=tools.DEFAULT_SERVER_DATETIME_FORMAT,
+                dt_format=tools.DEFAULT_SERVER_DATETIME_FORMAT,
             )

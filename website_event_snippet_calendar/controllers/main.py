@@ -1,7 +1,9 @@
 # Copyright 2018 Tecnativa - Jairo Llopis
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
-
+import ast
+import json
 from datetime import date, timedelta
+from urllib.parse import parse_qsl
 
 from openerp.fields import Date
 from openerp.http import Controller, request, route
@@ -44,7 +46,7 @@ class EventCalendar(Controller):
         type="json",
         website=True,
     )
-    def events_for_day(self, day=None, limit=None):
+    def events_for_day(self, day=None, limit=None, searches=None):
         """List events for a given day.
 
         :param day string:
@@ -54,12 +56,18 @@ class EventCalendar(Controller):
         :param limit int:
             How many results to return.
         """
+
+        searches_json = ast.literal_eval(json.dumps(parse_qsl(searches[1:])))
         ref = day or Date.to_string(date.today())
         domain = [
             ("date_end", ">=", ref),
         ]
         if day:
             domain.append(("date_begin", "<=", ref))
+
+        for search in searches_json:
+            if search[0] == 'type':
+                domain.append(('event_type_id', '=', int(search[1])))
         return request.env["event.event"].search_read(
             domain=domain,
             limit=limit,

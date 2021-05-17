@@ -125,11 +125,18 @@ odoo.define("website_event_snippet_calendar.animation", function(require) {
         },
 
         load_events: function(day, limit) {
-            console.log($('ul.o_wevent_index_topbar_filters>li>div>a.active')[0].search);
+            var searches = $("ul.o_wevent_index_topbar_filters>li>div>a.active");
+            if(searches){
+                searches = searches[0].search;
+            }
+            else{
+                searches = "";
+            }
+
             return ajax.rpc("/website_event_snippet_calendar/events_for_day", {
                 day: day,
                 limit: limit,
-                searches: $('ul.o_wevent_index_topbar_filters>li>div>a.active')[0].search,
+                searches: searches,
             });
         },
 

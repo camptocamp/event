@@ -7,7 +7,6 @@ odoo.define("website_event_snippet_calendar.snippets", function(require) {
     var options = require("web_editor.snippets.options");
 
     options.registry.website_event_snippet_calendar_list = options.Class.extend({
-
         increase: function() {
             this.$amount = this.$(".js_amount");
             var current = parseInt(this.$amount.html()) || 4;
@@ -21,5 +20,4 @@ odoo.define("website_event_snippet_calendar.snippets", function(require) {
             this.$amount.html(current);
         },
     });
-
 });

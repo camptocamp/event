@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Copyright 2021 Camptocamp SA - Iván Todorovich
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<templates id="template" xml:space="preserve">
+    <t t-name="EventSelectorPopup">
+        <div role="dialog" class="modal-dialog">
+            <div class="popup popup-text popup-event-selector">
+                <header class="title">
+                    <t t-esc=" widget.options.title || '' " />
+                </header>
+                <main>
+                    <section class="left-content">
+                        <div class="o_calendar_widget" />
+                    </section>
+                    <section class="right-content touch-scrollable scrollable-y">
+                        <div class="event-list-ul" />
+                    </section>
+                </main>
+                <footer class="footer">
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </t>
+    <t t-name="EventSelectorList">
+        <ul t-if="events.length" class="event-list">
+            <t t-foreach="events" t-as="event">
+                <t t-call="EventSelectorListItem" />
+            </t>
+        </ul>
+        <p t-else="">
+            There aren't events on these dates.
+        </p>
+    </t>
+    <t t-name="EventSelectorListItem">
+        <li class="event-list-item" t-att-data-id="event.id">
+            <div class="event-name" t-esc="event.display_name" />
+        </li>
+    </t>
+    <t t-name="EventTicketsPopup">
+        <div role="dialog" class="modal-dialog">
+            <div class="popup popup-text popup-event-tickets">
+                <header class="title">
+                    <t t-esc=" widget.options.title || '' " />
+                </header>
+                <main>
+                    <div class="product-list-scroller touch-scrollable scrollable-y">
+                        <div t-if="widget.tickets.length" class="product-list">
+                        </div>
+                        <div t-else="" class="product-list-empty">
+                            <p>There are no event tickets for this event</p>
+                        </div>
+                    </div>
+                </main>
+                <footer class="footer">
+                    <div class="button cancel">
+                        Close
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </t>
+    <t t-name="EventTicketListItem">
+        <article
+            t-attf-class="product ticket #{seats_available &lt;= 0 ? 'disabled' : ''}"
+            t-att-data-id="ticket.id"
+            tabindex="0"
+            t-attf-aria-labelledby="article_event_ticket_#{ticket.id}"
+        >
+            <div class="product-img">
+                <img t-att-src="image_url" alt="Product image" />
+                <span class="price-tag">
+                    <t t-esc="widget.format_currency(ticket.price, 'Product Price')" />
+                </span>
+                <!-- Availability indicator -->
+                <t t-if="seats_available &lt; 0">
+                    <span class="status-tag bg-danger">Oversold</span>
+                </t>
+                <t t-if="seats_available == 0">
+                    <span class="status-tag bg-danger">Out of Stock</span>
+                </t>
+                <t t-if="seats_available &gt; 0 and seats_available &lt;= 5">
+                    <span class="status-tag bg-warning">
+                        <t t-esc="_.str.sprintf(_t('%s remaining'), seats_available)" />
+                    </span>
+                </t>
+            </div>
+            <div
+                class="product-name ticket-name"
+                t-attf-id="article_ticket_#{ticket.id}"
+            >
+                <t t-esc="ticket.name" />
+            </div>
+        </article>
+    </t>
+</templates>

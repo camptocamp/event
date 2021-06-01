@@ -126,7 +126,7 @@ odoo.define("website_event_snippet_calendar.animation", function(require) {
 
         load_events: function(day, limit) {
             var searches = $("ul.o_wevent_index_topbar_filters>li>div>a.active");
-            if (searches) {
+            if (searches.length) {
                 searches = searches[0].search;
             } else {
                 searches = "";

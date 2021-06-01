@@ -66,7 +66,12 @@ class EventCalendar(Controller):
 
         for search in searches:
             if search[0] == "type":
-                domain.append(("event_type_id", "=", int(search[1])))
+                try:
+                    value = int(search[1])
+                except ValueError :
+                    value = 0
+                if value:
+                    domain.append(("event_type_id", "=", int(search[1])))
         return request.env["event.event"].search_read(
             domain=domain,
             limit=limit,

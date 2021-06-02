@@ -13,4 +13,12 @@ class PosConfig(models.Model):
         string="Available Event Types",
         help="Leave empty to load all events",
     )
-    iface_load_past_events = fields.Boolean("Load past events")
+    iface_event_seats_available_warning = fields.Integer(
+        "Event Seats Available Warning",
+        help="Display a warning when available seats is below this quantity.",
+        default=10,
+    )
+    iface_load_past_events = fields.Boolean(
+        string="Load Past Events",
+        help="If not enabled, only events that haven't finished will be loaded.",
+    )

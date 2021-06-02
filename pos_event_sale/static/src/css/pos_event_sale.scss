@@ -19,9 +19,11 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
     .modal-dialog .popup.popup-event-selector {
         width: 90%;
+        height: 90%;
         min-width: 600px;
         max-width: 1000px;
-        height: 600px;
+        min-height: 600px;
+        max-height: 800px;
 
         .left-content {
             position: absolute;
@@ -74,7 +76,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         }
 
         .event-list {
-            padding: 20px;
+            padding: 5px;
             font-size: 0.8rem;
             font-weight: normal;
 
@@ -90,6 +92,45 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
                 border-radius: 3px;
                 border-bottom-width: 3px;
                 cursor: pointer;
+
+                &.disabled {
+                    opacity: 0.5;
+                }
+
+                .event-title {
+                    font-weight: bold;
+                }
+
+                .event-subtitle {
+                    color: gray;
+                }
+
+                .event-info {
+                    margin-top: 0.5rem;
+                    font-size: 0.75rem;
+                    line-height: 1.1rem;
+                }
+
+                .status-tag {
+                    vertical-align: top;
+                    position: absolute;
+                    font-size: 0.75rem;
+                    top: 25px;
+                    right: 2px;
+                    color: white;
+                    line-height: 13px;
+                    padding: 2px 5px;
+                    border-radius: 2px;
+                    background: black;
+
+                    &.bg-danger {
+                        background: red;
+                    }
+
+                    &.bg-warning {
+                        background: orange;
+                    }
+                }
             }
         }
     }

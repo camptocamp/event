@@ -43,19 +43,20 @@ odoo.define("pos_event_sale.db", function(require) {
                         model: "event.event",
                         method: "search_read",
                         args: [
+                            [["id", "in", event_ids]],
                             [
-                                ["id", "in", event_ids],
-                                ["seats_availability", "=", "limited"],
+                                "id",
+                                "seats_availability",
+                                "seats_available",
+                                "seats_max",
                             ],
-                            ["id", "seats_available"],
                         ],
                     },
                     options
                 )
                 .then(events => {
                     for (const event of events) {
-                        this.event_by_id[event.id].seats_available =
-                            event.seats_available;
+                        Object.assign(this.event_by_id[event.id], event);
                     }
                 });
             // Update event.event.ticket seats_available
@@ -65,19 +66,20 @@ odoo.define("pos_event_sale.db", function(require) {
                         model: "event.event.ticket",
                         method: "search_read",
                         args: [
+                            [["event_id", "in", event_ids]],
                             [
-                                ["event_id", "in", event_ids],
-                                ["seats_availability", "=", "limited"],
+                                "id",
+                                "seats_availability",
+                                "seats_available",
+                                "seats_max",
                             ],
-                            ["id", "seats_available"],
                         ],
                     },
                     options
                 )
                 .then(tickets => {
                     for (const ticket of tickets) {
-                        this.event_ticket_by_id[ticket.id].seats_available =
-                            ticket.seats_available;
+                        Object.assign(this.event_ticket_by_id[ticket.id], ticket);
                     }
                 });
             // Resolve when both finish

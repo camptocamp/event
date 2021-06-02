@@ -84,6 +84,7 @@ odoo.define("pos_event_sale.EventSelectorPopup", function(require) {
                 buttonText: {today: _t("Today")},
                 selectable: true,
                 unselectAuto: false,
+                height: "auto",
                 select: this.selectDates.bind(this),
                 dayRender: function(date, cell) {
                     const datekey = date.format("YYYY-MM-DD");
@@ -102,17 +103,38 @@ odoo.define("pos_event_sale.EventSelectorPopup", function(require) {
             const dates = this._getDatesInRange(localStartDate, localEndDate);
             let events = [];
             for (const date of dates) {
-                if (this.eventsByDate[date]) {
+                if (this.eventsByDate[date] && this.eventsByDate[date].length) {
                     events.push(...this.eventsByDate[date]);
                 }
             }
             events = _.unique(events);
             // Set events
+            this.renderEventSelector(events);
+        },
+
+        renderEventSelector: function(events) {
+            // Render container
             const $eventList = $(
                 QWeb.render("EventSelectorList", {events: events, widget: this})
             );
-            $eventList.on("click", "li", this.click_event.bind(this));
-            this.$(".event-list-ul").html($eventList);
+            // Render each event
+            for (const event of events) {
+                $eventList.append(
+                    QWeb.render("EventSelectorListItem", {
+                        widget: this,
+                        event: event,
+                        seats_available: Math.max(
+                            ...event.event_ticket_ids.map(ticket =>
+                                this.pos.get_event_ticket_seats_available(ticket)
+                            )
+                        ),
+                    })
+                );
+            }
+            // Bind event handlers
+            $eventList.on("click", "li:not(.disabled)", this.click_event.bind(this));
+            // Add to dom
+            this.$(".event-selector").html($eventList);
         },
 
         click_event: function(ev) {

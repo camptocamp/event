@@ -304,10 +304,12 @@ odoo.define("pos_event_sale.models", function(require) {
                 "name",
                 "display_name",
                 "event_type_id",
+                "country_id",
                 "date_begin",
                 "date_end",
                 "seats_availability",
                 "seats_available",
+                "seats_max",
             ],
             condition: function(self) {
                 return self.config.iface_event_sale;
@@ -353,6 +355,7 @@ odoo.define("pos_event_sale.models", function(require) {
                 "price",
                 "seats_availability",
                 "seats_available",
+                "seats_max",
             ],
             condition: function(self) {
                 return self.config.iface_event_sale;

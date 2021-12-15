@@ -13,7 +13,7 @@ class Event(models.Model):
 
         if self.event_type_id.use_ticketing:
             for type_ticket in self.event_type_id.event_ticket_ids:
-                ticket = self.event_type_ids.filtered(
+                ticket = self.event_ticket_ids.filtered(
                     lambda t: t.product_id == type_ticket.product_id
                     and t.price == type_ticket.price
                 )

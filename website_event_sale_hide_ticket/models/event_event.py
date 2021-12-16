@@ -9,7 +9,7 @@ class Event(models.Model):
 
     @api.onchange("event_type_id")
     def _onchange_type(self):
-        super(Event, self)._onchange_type()
+        super()._onchange_type()
 
         if self.event_type_id.use_ticketing:
             for type_ticket in self.event_type_id.event_ticket_ids:

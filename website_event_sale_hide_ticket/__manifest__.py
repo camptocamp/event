@@ -4,7 +4,7 @@
     "name": "Website Event Sale Hide Ticket",
     "summary": "Allow to hide event ticket from the website",
     "version": "13.0.1.0.0",
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "category": "Website/Website",
     "website": "https://github.com/OCA/event",
     "author": "Camptocamp, Odoo Community Association (OCA)",

@@ -15,6 +15,7 @@ class EventTypeMail(models.Model):
         "all registrations and attached in separate files.\n"
         "The registrations recordset is available in the context and can be used "
         "to render the email body. ie: object.env.context.get('records').",
+        default=True,
     )
 
     @api.model

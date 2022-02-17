@@ -17,7 +17,7 @@ class EventMailRegistration(models.Model):
             # If there's no email, add directly to result, ungrouped
             if email:
                 email_to_rec_ids.setdefault(email, []).append(rec.id)
-            else:
+            else:  # pragma: no cover
                 res.append(rec)
         # Add groups to result
         for __, rec_ids in email_to_rec_ids.items():

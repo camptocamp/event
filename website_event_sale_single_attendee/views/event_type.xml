@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <record model="ir.ui.view" id="view_event_type_form">
+            <field name="name">event.type.form</field>
+            <field name="model">event.type</field>
+            <field name="inherit_id" ref="event.view_event_type_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group/group[2]/div[2]" position="after">
+                    <div colspan="2" class="o_checkbox_optional_field">
+                        <label for="single_attendee_registration" />
+                        <field name="single_attendee_registration" />
+                    </div>
+                </xpath>
+            </field>
+        </record>
+</odoo>

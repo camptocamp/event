@@ -10,15 +10,15 @@ _logger = logging.getLogger(__name__)
 
 class WebsiteSale(website_sale.WebsiteSale):
     @http.route(
-        ["/shop/payment/order_validity"], type="json", auth="public", website=True
+        ["/shop/check_before_payment"], type="json", auth="public", website=True
     )
-    def check_order_validity(self):
+    def check_before_payment(self):
         order = request.website.sale_get_order()
         if order:
-            if order.state != "draft":
+            if order.state == "cancel":
                 return {
-                    "order_is_valid": False,
-                    "invalid_order_message": request.env.company.cancelled_order_message,
+                    "valid": False,
+                    "message": request.env.company.cancelled_order_message,
                 }
 
             order_lines_by_event = (
@@ -35,10 +35,8 @@ class WebsiteSale(website_sale.WebsiteSale):
                 ):
                     self._cancel_cart_with_unavailable_seats(order)
                     return {
-                        "order_is_valid": False,
-                        "invalid_order_message": (
-                            request.env.company.no_more_seats_on_event_message
-                        ),
+                        "valid": False,
+                        "message": (request.env.company.no_more_seats_on_event_message),
                     }
 
             order_lines_by_ticket = (
@@ -59,10 +57,10 @@ class WebsiteSale(website_sale.WebsiteSale):
                 ):
                     self._cancel_cart_with_unavailable_seats(order)
                     return {
-                        "order_id_valid": False,
-                        "invalid_order_message": request.env.company.no_more_ticket_message,
+                        "valid": False,
+                        "message": request.env.company.no_more_ticket_message,
                     }
-        return {"order_is_valid": True}
+        return {"valid": True}
 
     def _check_event_availability(self, event, ticket_qty):
         if event.seats_availability == "limited":
@@ -78,8 +76,7 @@ class WebsiteSale(website_sale.WebsiteSale):
 
     def _cancel_cart_with_unavailable_seats(self, cart):
         try:
-            with request.env.cr.savepoint():
-                cart.action_cancel()
-                cart.message_post(body=_("Seats not available anymore"))
+            cart.action_cancel()
+            cart.message_post(body=_("Seats not available anymore"))
         except Exception:
             _logger.exception("Unable to cancel cart id %s", cart.id)

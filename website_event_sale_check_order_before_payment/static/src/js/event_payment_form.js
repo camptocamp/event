@@ -3,7 +3,7 @@ odoo.define(
     function(require) {
         "use strict";
 
-        var paymentForm = require("payment.payment_form");
+        const paymentForm = require("payment.payment_form");
         const core = require("web.core");
         const _t = core._t;
 
@@ -16,17 +16,15 @@ odoo.define(
                 // This._super only works before any await operation, so store it here
                 const _super = this._super;
                 const order_validity_data = await this._rpc({
-                    route: "/shop/payment/order_validity",
-                    params: [],
+                    route: "/shop/check_before_payment",
                 });
-                if (order_validity_data.order_is_valid) {
+                if (order_validity_data.valid) {
                     return _super.apply(this, arguments);
                 }
                 this.displayError(
                     _t("The payment can't be processed"),
-                    _t(order_validity_data.invalid_order_message || "Unexpected error")
+                    _t(order_validity_data.message || "Unexpected error")
                 );
-                return;
             },
         });
     }

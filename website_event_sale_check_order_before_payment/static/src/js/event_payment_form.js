@@ -8,23 +8,34 @@ odoo.define(
         const _t = core._t;
 
         paymentForm.include({
-            /**
-             * @override
-             */
-            // eslint-disable-next-line no-unused-vars
-            payEvent: async function(ev) {
-                // This._super only works before any await operation, so store it here
-                const _super = this._super;
+            events: _.extend({}, paymentForm.prototype.events, {
+                "click #o_payment_form_check_order_and_pay": "checkOrderAndPayEvent",
+            }),
+
+            checkOrderAndPayEvent: async function(ev) {
+                ev.preventDefault();
                 const order_validity_data = await this._rpc({
                     route: "/shop/check_before_payment",
                 });
                 if (order_validity_data.valid) {
-                    return _super.apply(this, arguments);
+                    return this.payEvent(ev);
                 }
                 this.displayError(
                     _t("The payment can't be processed"),
                     _t(order_validity_data.message || "Unexpected error")
                 );
+            },
+
+            /**
+             * @override
+             */
+            onSubmit: async function(ev) {
+                const res = this._super.apply(this, arguments);
+                const button = $(ev.target).find('*[type="submit"]')[0];
+                if (button.id === "o_payment_form_check_order_and_pay") {
+                    return await this.checkOrderAndPayEvent(ev);
+                }
+                return res;
             },
         });
     }

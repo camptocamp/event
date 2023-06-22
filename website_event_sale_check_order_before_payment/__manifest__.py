@@ -13,5 +13,9 @@
     "license": "AGPL-3",
     "category": "Website/Website",
     "depends": ["website_event_sale"],
-    "data": ["views/assets.xml", "views/res_config_settings_views.xml"],
+    "data": [
+        "views/assets.xml",
+        "views/payment_templates.xml",
+        "views/res_config_settings_views.xml",
+    ],
 }
